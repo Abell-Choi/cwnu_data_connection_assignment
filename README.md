@@ -9,7 +9,6 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 ## 🔖 To Do List
----
 ### Client Side
 - 서버에서 실제 데이터를 주고받고 하는 작업 필요
 - init가 완료된 경우 send thread, recv thread로 나누어서 작업하는 것을 구현해야함

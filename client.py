@@ -192,9 +192,3 @@ if __name__ == '__main__':
     send_th.join()
     recv_th.join()
 
-
-
-    #socket_connector.connect(conn_auth['host'], conn_auth['port'])
-    # socket_connector.sendall('안녕'.encode()) # send message
-    #recv_data = socket_connector.recv(1024).decode # socket received data
-

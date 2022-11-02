@@ -26,6 +26,10 @@ func_table = {
     'update_node' : lambda res_dict : init_func(res_dict),
     'receive_data' : lambda res_dict : receive_data_func(res_dict),
     'r_finished' : lambda res_dict : r_finished(res_dict),
+    'accept_request' : lambda res_dict : accept_request(res_dict),
+    'reject_request' : lambda res_dict : reject_request(res_dict),
+    's_finished' : lambda res_dict : reject_request(res_dict),
+    'end_of_links' : lambda res_dict : end_of_links(res_dict)
 }
 
 # socket setting
@@ -147,7 +151,7 @@ def recv_th_func():
 
     return False
 
-def end_func():
+def end_of_links(res_dict:dict):
     return False
 
 # ================================ Send Function Group ================================ #
@@ -191,4 +195,3 @@ if __name__ == '__main__':
 
     send_th.join()
     recv_th.join()
-

@@ -4,7 +4,10 @@ import threading
 from datetime import datetime, timedelta
 import math
 import random
+import os
 
+log_directory_path = os.path.dirname(os.path.abspath(__file__)) +'/logs/'
+log_file_name = 'temp.txt'
 
 
 # 로그만을 위한 뭐시기
@@ -19,7 +22,9 @@ log_table = {
     'accept' : lambda update_time : "{0} Data send request Accept from Link".format(update_time),
     'reject' : lambda update_time, back_off_time: "{0} Data Send Request Reject from Link\n{0} Exponential Back-off Time: {1} msec".format(update_time, back_off_time),
     's_finished' : lambda update_time, target_node_name: "{0} Data Send Finished To {1}".format(update_time, target_node_name),
-}
+    'eof' : lambda update_time: "{0} System Time Finished\n{0} Link Finished".format(update_time)
+
+}   
 
 func_table = {
     'init' : lambda res_dict : init_func(res_dict),
@@ -62,6 +67,8 @@ def init():
         if i == False:
             log_func(log_table['error']("Client", "Init Error"))
             return False
+
+    log_file_name = conn_auth['node_name'] +'.txt'
     return True
 
 
@@ -82,9 +89,6 @@ def update_back_off_time(msec_data:int):    # update back_off_timer
 def check_back_off_time():
     if back_off_end_time == None: back_off_end_time = update_back_off_time(random.randrange(1,100))
     return False if back_off_end_time > datetime.now() else True
-
-def EOF():
-    return False
 
 # ================================ Receive Function Group ================================ #
 def init_func(res_dict:dict):
@@ -149,9 +153,19 @@ def recv_th_func():
     while not isDisconnected:
         recv_func()
 
+    print("Client -> Recv Thread Removed")
     return False
 
 def end_of_links(res_dict:dict):
+    log_func(log_table['eof'](res_dict['update_time']))
+    str_temps = ''
+    for i in log_list:
+        str_temps += i +'\n'
+    
+    f = open(log_directory_path +log_file_name, 'w')
+    f.write(str_temps)
+    f.close()
+    isDisconnected = True
     return False
 
 # ================================ Send Function Group ================================ #
@@ -177,13 +191,15 @@ def send_func():
 def send_th_func():
     while not isDisconnected:
         send_func()
+    
+    print("Client -> Send Thread Removed")
     return False
 
 
 
 if __name__ == '__main__':
     if not init():
-        print(log_list)
+        end_of_links({'update_time' : '00:00:00'})
         quit()
     
     # 다중 스레드 (전송용 수신용)
@@ -195,3 +211,5 @@ if __name__ == '__main__':
 
     send_th.join()
     recv_th.join()
+    print("Client -> ALL SYSTEM DOWN")
+    quit()

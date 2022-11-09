@@ -1,15 +1,19 @@
-from module import log_table
-from module import node
-from module import socket_controller
-from module import time_utility
+from module import log
+from module import socket as sck
 
-# socket server setting
-link_switch = True
-link_state = 0
+link_state = {
+    'state' : -1
+}
 
-# Log Func
 if __name__ == "__main__":
-    print('socket_on')
-    while link_switch == True:
-        new_node = socket_controller.socket_listen()
-        node.add_node(new_node)
+    # socket listen  실행
+    if (socket_obj:= sck.socket_server_init())['res'] == 'err':
+        log.log_function(log.log_table['error'](socket_obj['value']))
+        quit()
+    # 나 시작했어요!
+    log.log_function(log.log_table['start'])
+    link_state['state'] = 0
+    
+    # listen
+    while link_state['state'] != -1:
+        new_node = sck.socket_listen(socket_obj)

@@ -1,7 +1,15 @@
 import time_utility
 log_table = {
     'start' : "00:00:00 Link Start //{1} min {2} sec {3} msec\n00:00:00 System Clock Start //{1} min {2} sec {3} msec\n",
-    'error' : lambda error_value:"{0} [ERROR] -> {1}".format(time_utility.get_system_runtime(), error_value)
+    'error' : lambda error_value:"{0} [ERROR] -> {1}".format(time_utility.get_system_runtime(), error_value),
+    'new_node_created' : lambda target_node_name : "{0} new node created -> {1}".format(time_utility.get_system_runtime(), target_node_name),
+    'new_node_broadcast' : lambda target_node_name : "{0} broadcast node list to {1}".format(time_utility.get_system_runtime(), target_node_name),
+    'node_deleted' : lambda target_node_name : "{0} {1} node is deleted!".format(time_utility.get_system_runtime(), target_node_name),
+    'req' : lambda sender_node_name, target_node_name : "{0} {1} Data Send Request To {2}".format(time_utility.get_system_runtime(), sender_node_name, target_node_name),
+    'accept' : lambda sender_node_name, target_node_name : "{0} Accept : {1} Data Send Request To {2}".format(time_utility.get_system_runtime(), sender_node_name, target_node_name),
+    'reject' : lambda sender_node_name, target_node_name : "{0} Reject : {1} Data Send Request To {2}".format(time_utility.get_system_runtime(), sender_node_name, target_node_name),
+    'req' : lambda sender_node_name, target_node_name : "{0} {1} Data Send Finished To {2}".format(time_utility.get_system_runtime(), sender_node_name, target_node_name),
+    
 }
 log_list = []
 

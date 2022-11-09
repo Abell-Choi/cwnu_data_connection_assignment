@@ -41,8 +41,8 @@ def socket_recv(connection:socket.socket, link_state:dict):
         if dict_res['type'] == 'err' : 
             continue
 
-        command.command_table[dict_res['type']](dict_res)
-        continue
+        if dict_res['type'] == 'req':
+            command.send_req(dict_res, link_state, connection)
 
 def get_socket_recv_th(connection:socket.socket, link_state:dict):
     t = threading.Thread(target=socket_recv, args=(connection, link_state))

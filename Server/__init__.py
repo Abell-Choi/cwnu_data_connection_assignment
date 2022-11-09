@@ -17,3 +17,5 @@ if __name__ == "__main__":
     # listen
     while link_state['state'] != -1:
         new_node = sck.socket_listen(socket_obj)
+
+    log.log_saver()

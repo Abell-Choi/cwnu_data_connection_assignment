@@ -2,9 +2,6 @@ import socket
 import json
 import threading
 
-import log
-import command
-
 def socket_server_init():
     try:
         socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,13 +13,14 @@ def socket_server_init():
         return {'res' : 'err', 'value' : e}
 
 
-def socket_listen(socket_obj:socket.socket):
+def socket_listen(socket_obj:dict):
+    socket_obj = socket_obj['value']
     socket_obj.listen()
     node, addr = socket_obj.accept()
     return node
 
 def socket_send(connection:socket.socket, message:dict):
-    connection.sendall(json.dumps(message, indent=4, ensure_ascii=False))
+    connection.sendall(json.dumps(message, indent=4, ensure_ascii=False).encode())
 
 def json_to_dict(sender:str, string_message:str):
     try:
@@ -42,7 +40,7 @@ def socket_recv(connection:socket.socket, link_state:dict):
             continue
 
         if dict_res['type'] == 'req':
-            command.send_req(dict_res, link_state, connection)
+            command.send_req(dict_res, link_state)
 
 def get_socket_recv_th(connection:socket.socket, link_state:dict):
     t = threading.Thread(target=socket_recv, args=(connection, link_state))

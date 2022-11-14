@@ -1,5 +1,7 @@
 from module import log
-from module import socket as sck
+from module import socket_func as sck
+from module import node as node
+from module import time_utility
 
 link_state = {
     'state' : -1
@@ -17,5 +19,5 @@ if __name__ == "__main__":
     # listen
     while link_state['state'] != -1:
         new_node = sck.socket_listen(socket_obj)
-
+        node.add_node(new_node, link_state)
     log.log_saver()
